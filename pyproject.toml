@@ -7,7 +7,15 @@ name = "insureagent"
 version = "0.1.0"
 description = "Baozhiban AI modular service bootstrap"
 requires-python = ">=3.12,<3.13"
-dependencies = ["fastapi>=0.115,<1", "uvicorn>=0.34,<1", "pydantic>=2.10,<3"]
+dependencies = [
+    "fastapi>=0.115,<1",
+    "uvicorn>=0.34,<1",
+    "pydantic>=2.10,<3",
+    "sqlalchemy>=2.0,<3",
+    "cryptography>=44,<48",
+    "python-multipart>=0.0.20,<1",
+    "psycopg[binary]>=3.2,<4",
+]
 
 [dependency-groups]
 dev = ["pytest>=8,<10", "httpx>=0.28,<1", "ruff>=0.11,<1"]
@@ -16,8 +24,13 @@ prototype = ["playwright>=1.50,<2", "pillow>=11,<13"]
 [project.scripts]
 insureagent-worker = "insureagent_worker.main:main"
 
+[project.optional-dependencies]
+asr = [
+    "vosk>=0.3.45,<0.4",
+]
+
 [tool.hatch.build.targets.wheel]
-packages = ["services/api/src/insureagent_api", "services/worker/src/insureagent_worker", "packages/domain/src/insureagent_domain", "packages/ai/src/insureagent_ai"]
+packages = ["services/api/src/insureagent_api", "services/worker/src/insureagent_worker", "packages/domain/src/insureagent_domain", "packages/ai/src/insureagent_ai", "packages/persistence/src/insureagent_persistence"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

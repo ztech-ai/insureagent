@@ -22,3 +22,10 @@ dist/
 *.p12
 *.mobileprovision
 .DS_Store
+
+*.db
+*.db-*
+.alpha/
+
+models/
+*.wav

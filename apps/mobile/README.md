@@ -1,13 +1,16 @@
-# 移动端
+# 移动端 Alpha
 
-Flutter 3.38.5 初始骨架，选择为待 W2 真机验证的工程起点，见 ADR-001。四个导航入口可运行，但没有真实录音、账号、支付或网络处理。
+Flutter 3.38.5；真实 API 登录、录音／文字、按账户加密草稿、上传重试、客户档案、片段归属、事实确认／撤回和手动任务。
 
 ```sh
-cd apps/mobile
 flutter pub get
 flutter analyze
 flutter test
-flutter run
+flutter run --dart-define=API_URL=https://your-private-alpha-api.example
 ```
 
-ios/、android/ 已由 Flutter 3.38.5 生成。原生构建需要 Android SDK 或 macOS + Xcode；签名、商店包名、录音权限和真机验收仍待实施。当前包名仅为工程占位，禁止提交签名密钥。
+Android debug 模拟器可用默认 http://10.0.2.2:8000；iOS 使用受信任 HTTPS。API 账号由服务器 CLI 创建。Android 最低 API 23，iOS 最低 13.0；密钥存储与录音插件必须真机验证。签名与商店发布不包含在内部 Alpha 中。
+
+构建：`flutter build apk --debug`；macOS 上 `flutter build ios --simulator --debug`。CI 保存构建产物。不要将 debug 签名包作为商店版本。
+
+[运行手册及真机矩阵](../../docs/releases/alpha-runbook.md) · [验收状态](../../docs/releases/alpha-progress.md)

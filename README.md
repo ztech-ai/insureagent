@@ -2,7 +2,7 @@
 
 保险销售人员的个人 AI 客户经营助手。采用 iOS / Android APP 与云端受控 Agent，支持记录、客户档案、经营建议和跟进闭环。
 
-**当前版本为项目初始化骨架，不是可商用 APP。** 已归档需求、设计、原型和开发计划；API 健康检查、领域状态与事件契约、禁用的模型网关、离线事件校验入口和移动端四栏导航已建立。认证、数据库、录音、模型处理、订阅及生产部署仍待开发，禁止接入真实客户资料。
+**当前为内部 Alpha 0.1，不能用于真实客户资料或商用。** 已实现移动端和云端核心记录闭环；真机、ASR/模型质量与 G2 人工验收仍待完成，详见 [实施与验收记录](docs/releases/alpha-progress.md)。
 
 ## 仓库结构
 
@@ -24,25 +24,22 @@
 | `evals/` | AI 评测规范及合成事件样例 |
 | `tests/`、`scripts/` | 工程测试及契约生成工具 |
 
-## 快速启动
+## Alpha 0.1
 
-需要 Python 3.12 和 uv。依赖通过 uv.lock 固定。
+已实现内部合成数据的记录、语音转写、人工归属及事实确认、档案证据、纠错和手动任务闭环。移动端为 Flutter 真实 API 客户端，含加密离线草稿及录音；后端为 FastAPI + PostgreSQL/SQLite + 独立 Worker。
+
+- [运行与演示手册](docs/releases/alpha-runbook.md)
+- [实施范围、验证结果与 G2 待验收项](docs/releases/alpha-progress.md)
+- [移动端构建](apps/mobile/README.md)
+- [容器启动](infra/README.md)
 
 ```sh
 uv sync --frozen
-make test
-make lint
-make api
+uv run pytest -q
+uv run python scripts/alpha_smoke.py
 ```
 
-打开 http://127.0.0.1:8000/docs 。`/health/live` 返回 200；`/health/ready` 返回 503，表示持久化、鉴权等生产依赖尚未实现。
-
-```sh
-make prototype
-# 浏览器打开 http://127.0.0.1:8080/insurance-mobile.html
-```
-
-移动端初始化及运行见 [mobile README](apps/mobile/README.md)；本地容器见 [infra README](infra/README.md)。不需要配置模型密钥即可执行现有测试。
+默认规则提取，可选 Vosk 本地转写和 Ollama 来源片段筛选。测试不需要第三方模型密钥。真实语音准确率、真机录音和目标用户可用性仍需验收，不能用于真实客户资料或收费。
 
 ## 设计与计划
 

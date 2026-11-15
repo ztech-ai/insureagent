@@ -1,0 +1,57 @@
+{
+  "scope": "synthetic contract regression, not quality gate",
+  "total": 10,
+  "passed": 10,
+  "cases": [
+    {
+      "id": "family",
+      "passed": true,
+      "processor": "local-rules-v1"
+    },
+    {
+      "id": "two-people",
+      "passed": true,
+      "processor": "local-rules-v1"
+    },
+    {
+      "id": "same-name",
+      "passed": true,
+      "processor": "local-rules-v1"
+    },
+    {
+      "id": "no-needs",
+      "passed": true,
+      "processor": "local-rules-v1"
+    },
+    {
+      "id": "phone",
+      "passed": true,
+      "processor": "local-rules-v1"
+    },
+    {
+      "id": "id-card",
+      "passed": true,
+      "processor": "local-rules-v1"
+    },
+    {
+      "id": "email",
+      "passed": true,
+      "processor": "local-rules-v1"
+    },
+    {
+      "id": "injection",
+      "passed": true,
+      "processor": "local-rules-v1"
+    },
+    {
+      "id": "negative",
+      "passed": true,
+      "processor": "local-rules-v1"
+    },
+    {
+      "id": "spaces",
+      "passed": true,
+      "processor": "local-rules-v1"
+    }
+  ]
+}

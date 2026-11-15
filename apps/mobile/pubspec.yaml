@@ -5,8 +5,14 @@ version: 0.1.0+1
 environment:
   sdk: '>=3.10.0 <4.0.0'
 dependencies:
+  cryptography: ^2.9.0
   flutter:
     sdk: flutter
+  flutter_secure_storage: ^11.2.0
+  http: ^1.6.0
+  path_provider: ^2.1.6
+  record: ^6.2.1
+  uuid: ^4.6.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

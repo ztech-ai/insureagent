@@ -3,11 +3,12 @@ WORKDIR /app
 COPY pyproject.toml uv.lock ./
 COPY services ./services
 COPY packages ./packages
+COPY scripts ./scripts
 RUN --mount=type=secret,id=ca_bundle,target=/tmp/ca-bundle.pem \
     if [ -f /tmp/ca-bundle.pem ]; then \
       export SSL_CERT_FILE=/tmp/ca-bundle.pem PIP_CERT=/tmp/ca-bundle.pem; \
     fi; \
-    pip install --no-cache-dir uv==0.13.6 && uv --system-certs sync --frozen --no-dev --no-editable
+    pip install --no-cache-dir uv==0.13.6 && uv --system-certs sync --frozen --no-dev --no-editable --extra asr
 RUN chmod -R a+rX /app && useradd --uid 10001 --create-home appuser
 USER appuser
 EXPOSE 8000
