@@ -37,6 +37,10 @@ def test_multicustomer_segments_and_retraction(alpha):
         assert response.status_code == 200
         row = response.json()
     assert all(f["data"]["state"] == "proposed" for f in row["facts"])
+    for target in (a, b):
+        profile = client.get("/v1/customers/" + target["id"], headers=alice).json()
+        assert profile["facts"] == []
+        assert profile["records"][0]["id"] == record["id"]
     ids = [f["id"] for f in row["facts"]]
     row = client.post(
         path + "/facts/confirm",

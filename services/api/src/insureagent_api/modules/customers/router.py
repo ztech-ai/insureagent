@@ -46,12 +46,13 @@ def detail(customer_id: str, request: Request, tenant=Depends(principal)):
     with store.transaction() as conn:
         row = store.get(conn, tenant, customer_id, "customer")
         row["records"] = store.list(conn, tenant, "record", related_id=customer_id)
-        row["facts"] = [
+        associated = [
             f
             for f in store.list(conn, tenant, "fact", related_id=customer_id)
-            if f["data"]["state"] == "confirmed"
+            if f["data"]["state"] != "retracted"
         ]
-        source_ids = {f["source_id"] for f in row["facts"]}
+        row["facts"] = [f for f in associated if f["data"]["state"] == "confirmed"]
+        source_ids = {f["source_id"] for f in associated}
         timeline = {r["id"]: r for r in row["records"]}
         for source_id in source_ids:
             timeline[source_id] = store.get(conn, tenant, source_id, "record")
