@@ -29,7 +29,7 @@ def test_liveness_does_not_claim_dependency_readiness():
     client = TestClient(app)
     assert client.get("/health/live").status_code == 200
     assert client.get("/health/ready").status_code == 503
-    assert client.post("/v1/records", json={}).status_code == 404
+    assert client.post("/v1/records", json={}).status_code == 503
 
 
 def test_link_and_processing_success_do_not_confirm_facts():
