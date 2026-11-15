@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
-from insureagent_persistence.store import Conflict, accounts, entities
+from insureagent_persistence.store import Conflict, accounts, audio_blobs, entities
+from sqlalchemy import delete as sql_delete
 from sqlalchemy import select
 
 from insureagent_api.modules.identity.auth import principal, store_for
@@ -8,6 +9,7 @@ from insureagent_api.schemas import (
     RecordEdit,
     RecordInput,
     Resolution,
+    SegmentResolution,
     VersionInput,
 )
 
@@ -103,6 +105,7 @@ def edit(record_id: str, body: RecordEdit, request: Request, tenant=Depends(prin
         data = {
             **row["data"],
             "text": body.text,
+            "asr_status": "manual",
             "processing": "queued",
             "facts": "proposed",
             "person_names": [],
@@ -123,6 +126,8 @@ def resolve(record_id: str, body: Resolution, request: Request, tenant=Depends(p
             store.get(conn, tenant, customer_id, "customer")
         if row["version"] != body.expected_version:
             raise Conflict()
+        if customer_id and len(row["data"].get("person_names", [])) > 1:
+            raise HTTPException(409, "multiple_people_assign_segments")
         # Moving/unlinking resets explicit confirmations; candidates may be confirmed again.
         for fact in store.list(conn, tenant, "fact", source_id=record_id):
             if fact["data"]["state"] != "retracted":
@@ -154,8 +159,6 @@ def confirm(record_id: str, body: FactConfirmation, request: Request, tenant=Dep
         row = store.get(conn, tenant, record_id, "record", lock=True)
         if row["version"] != body.expected_version:
             raise Conflict()
-        if not row["related_id"]:
-            raise HTTPException(409, "resolve_customer_first")
         selected = {str(x) for x in body.fact_ids}
         facts = store.list(conn, tenant, "fact", source_id=record_id)
         current = {
@@ -165,6 +168,8 @@ def confirm(record_id: str, body: FactConfirmation, request: Request, tenant=Dep
         }
         if not selected.issubset(current):
             raise HTTPException(409, "facts_not_current")
+        if any(not current[fid]["related_id"] for fid in selected):
+            raise HTTPException(409, "resolve_customer_first")
         for fid in selected:
             fact = current[fid]
             store.change(
@@ -172,7 +177,7 @@ def confirm(record_id: str, body: FactConfirmation, request: Request, tenant=Dep
                 fact,
                 {**fact["data"], "state": "confirmed"},
                 fact["version"],
-                related_id=row["related_id"],
+                related_id=fact["related_id"],
             )
         row = store.change(
             conn,
@@ -210,6 +215,11 @@ def delete(record_id: str, body: VersionInput, request: Request, tenant=Depends(
         if row["version"] != body.expected_version:
             raise Conflict()
         invalidate_facts(store, conn, row)
+        conn.execute(
+            sql_delete(audio_blobs).where(
+                audio_blobs.c.tenant_id == tenant, audio_blobs.c.record_id == record_id
+            )
+        )
         return store.change(
             conn,
             row,
@@ -218,3 +228,58 @@ def delete(record_id: str, body: VersionInput, request: Request, tenant=Depends(
             revision=row["revision"] + 1,
             deleted=True,
         )
+
+
+@router.post("/{record_id}/segments/resolution")
+def resolve_segments(
+    record_id: str, body: SegmentResolution, request: Request, tenant=Depends(principal)
+):
+    store = store_for(request)
+    with store.transaction() as conn:
+        row = store.get(conn, tenant, record_id, "record", lock=True)
+        if row["version"] != body.expected_version:
+            raise Conflict()
+        customer_id = str(body.customer_id) if body.customer_id else None
+        if customer_id:
+            store.get(conn, tenant, customer_id, "customer")
+        current = {
+            f["id"]: f
+            for f in store.list(conn, tenant, "fact", source_id=record_id)
+            if f["data"]["state"] != "retracted" and f["data"]["source_revision"] == row["revision"]
+        }
+        selected = {str(fid) for fid in body.fact_ids}
+        if not selected.issubset(current):
+            raise HTTPException(409, "facts_not_current")
+        for fid in selected:
+            fact = current[fid]
+            store.change(
+                conn,
+                fact,
+                {**fact["data"], "state": "proposed"},
+                fact["version"],
+                related_id=customer_id,
+            )
+        row = store.change(
+            conn,
+            row,
+            {**row["data"], "identity": "segments", "facts": "proposed"},
+            body.expected_version,
+            related_id=None,
+        )
+        return record_detail(store, conn, row)
+
+
+@router.post("/{record_id}/facts/retract")
+def retract(record_id: str, body: FactConfirmation, request: Request, tenant=Depends(principal)):
+    store = store_for(request)
+    with store.transaction() as conn:
+        row = store.get(conn, tenant, record_id, "record", lock=True)
+        if row["version"] != body.expected_version:
+            raise Conflict()
+        for fid in body.fact_ids:
+            fact = store.get(conn, tenant, str(fid), "fact")
+            if fact["source_id"] != record_id or fact["data"]["source_revision"] != row["revision"]:
+                raise HTTPException(409, "facts_not_current")
+            store.change(conn, fact, {**fact["data"], "state": "proposed"}, fact["version"])
+        row = store.change(conn, row, {**row["data"], "facts": "proposed"}, body.expected_version)
+        return record_detail(store, conn, row)

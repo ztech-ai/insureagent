@@ -31,3 +31,57 @@ jobs:
         working-directory: apps/mobile
       - run: flutter test
         working-directory: apps/mobile
+  postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_PASSWORD: alpha-ci-only
+          POSTGRES_DB: alpha
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.13.6"
+          python-version: "3.12"
+      - run: uv sync --frozen
+      - run: uv run pytest
+        env:
+          TEST_DATABASE_URL: postgresql+psycopg://postgres:alpha-ci-only@localhost:5432/alpha
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.38.5"
+          channel: stable
+      - run: flutter build apk --debug
+        working-directory: apps/mobile
+      - uses: actions/upload-artifact@v4
+        with:
+          name: insureagent-alpha-debug-apk
+          path: apps/mobile/build/app/outputs/flutter-apk/app-debug.apk
+  ios:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.38.5"
+          channel: stable
+      - run: flutter build ios --simulator --debug
+        working-directory: apps/mobile
+      - uses: actions/upload-artifact@v4
+        with:
+          name: insureagent-alpha-ios-simulator
+          path: apps/mobile/build/ios/iphonesimulator/Runner.app

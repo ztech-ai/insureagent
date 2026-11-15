@@ -24,6 +24,11 @@ prototype = ["playwright>=1.50,<2", "pillow>=11,<13"]
 [project.scripts]
 insureagent-worker = "insureagent_worker.main:main"
 
+[project.optional-dependencies]
+asr = [
+    "vosk>=0.3.45,<0.4",
+]
+
 [tool.hatch.build.targets.wheel]
 packages = ["services/api/src/insureagent_api", "services/worker/src/insureagent_worker", "packages/domain/src/insureagent_domain", "packages/ai/src/insureagent_ai", "packages/persistence/src/insureagent_persistence"]
 

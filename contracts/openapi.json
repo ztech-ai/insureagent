@@ -64,6 +64,30 @@
         ]
       }
     },
+    "/v1/usage": {
+      "get": {
+        "tags": [
+          "identity"
+        ],
+        "summary": "Usage",
+        "operationId": "usage_v1_usage_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "/v1/customers": {
       "post": {
         "tags": [
@@ -228,6 +252,97 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/records/audio": {
+      "post": {
+        "tags": [
+          "audio"
+        ],
+        "summary": "Upload",
+        "operationId": "upload_v1_records_audio_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "client_record_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Client Record Id"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/records/{record_id}/audio": {
+      "get": {
+        "tags": [
+          "audio"
+        ],
+        "summary": "Download",
+        "operationId": "download_v1_records__record_id__audio_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "record_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Record Id"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -654,6 +769,116 @@
         }
       }
     },
+    "/v1/records/{record_id}/segments/resolution": {
+      "post": {
+        "tags": [
+          "records"
+        ],
+        "summary": "Resolve Segments",
+        "operationId": "resolve_segments_v1_records__record_id__segments_resolution_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "record_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Record Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SegmentResolution"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/records/{record_id}/facts/retract": {
+      "post": {
+        "tags": [
+          "records"
+        ],
+        "summary": "Retract",
+        "operationId": "retract_v1_records__record_id__facts_retract_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "record_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Record Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FactConfirmation"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/tasks": {
       "get": {
         "tags": [
@@ -821,6 +1046,18 @@
     "schemas": {
       "CustomerEdit": {
         "properties": {
+          "client_request_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Request Id"
+          },
           "name": {
             "type": "string",
             "maxLength": 100,
@@ -868,6 +1105,18 @@
       },
       "CustomerInput": {
         "properties": {
+          "client_request_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Request Id"
+          },
           "name": {
             "type": "string",
             "maxLength": 100,
@@ -1040,6 +1289,45 @@
         ],
         "title": "Resolution"
       },
+      "SegmentResolution": {
+        "properties": {
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version"
+          },
+          "customer_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Customer Id"
+          },
+          "fact_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Fact Ids"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_version",
+          "customer_id",
+          "fact_ids"
+        ],
+        "title": "SegmentResolution"
+      },
       "TaskEdit": {
         "properties": {
           "expected_version": {
@@ -1079,6 +1367,18 @@
       },
       "TaskInput": {
         "properties": {
+          "client_request_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Request Id"
+          },
           "customer_id": {
             "type": "string",
             "format": "uuid",

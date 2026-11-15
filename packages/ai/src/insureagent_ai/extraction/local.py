@@ -26,8 +26,8 @@ def extract(text: str) -> dict:
                     "field": "contact_note",
                     "value": redact(sentence),
                     "evidence": sentence,
-                    "start": match.start(),
-                    "end": match.end(),
+                    "start": match.start() + len(match.group()) - len(match.group().lstrip()),
+                    "end": match.end() - len(match.group()) + len(match.group().rstrip()),
                 }
             )
     return {

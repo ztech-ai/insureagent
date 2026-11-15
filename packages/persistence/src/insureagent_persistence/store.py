@@ -10,6 +10,7 @@ from sqlalchemy import (
     Boolean,
     Column,
     ForeignKeyConstraint,
+    Index,
     Integer,
     LargeBinary,
     MetaData,
@@ -84,6 +85,37 @@ outbox = Table(
 )
 
 
+audio_blobs = Table(
+    "audio_blobs",
+    metadata,
+    Column("tenant_id", String(36), primary_key=True),
+    Column("record_id", String(36), primary_key=True),
+    Column("payload", LargeBinary, nullable=False),
+    ForeignKeyConstraint(["tenant_id", "record_id"], ["entities.tenant_id", "entities.id"]),
+)
+
+
+schema_versions = Table(
+    "schema_versions",
+    metadata,
+    Column("version", Integer, primary_key=True),
+    Column("installed_at", String(40), nullable=False),
+)
+stage_usage = Table(
+    "stage_usage",
+    metadata,
+    Column("tenant_id", String(36), primary_key=True),
+    Column("record_id", String(36), primary_key=True),
+    Column("revision", Integer, primary_key=True),
+    Column("stage", String(24), primary_key=True),
+    Column("units", Integer, nullable=False),
+    Column("completed_at", String(40), nullable=False),
+    ForeignKeyConstraint(["tenant_id", "record_id"], ["entities.tenant_id", "entities.id"]),
+)
+Index("ix_entities_tenant_kind_time", entities.c.tenant_id, entities.c.kind, entities.c.created_at)
+Index("ix_jobs_claim", jobs.c.state, jobs.c.lease_until)
+
+
 def now():
     return datetime.now(timezone.utc).isoformat()
 
@@ -113,6 +145,12 @@ class Store:
     def initialize(self):
         # Initial Alpha schema only; explicit operator action, never implicit on API boot.
         metadata.create_all(self.engine)
+        with self.transaction() as conn:
+            versions = list(conn.execute(select(schema_versions.c.version)).scalars())
+            if any(v != 1 for v in versions):
+                raise ValueError("unsupported_schema_version")
+            if not versions:
+                conn.execute(insert(schema_versions).values(version=1, installed_at=now()))
 
     @contextmanager
     def transaction(self):
@@ -226,3 +264,16 @@ class Store:
             )
         )
         return ident
+
+    def settle_stage(self, conn, record, stage, units):
+        key = dict(
+            tenant_id=record["tenant_id"],
+            record_id=record["id"],
+            revision=record["revision"],
+            stage=stage,
+        )
+        query = select(stage_usage)
+        for name, value in key.items():
+            query = query.where(stage_usage.c[name] == value)
+        if conn.execute(query).first() is None:
+            conn.execute(insert(stage_usage).values(**key, units=units, completed_at=now()))

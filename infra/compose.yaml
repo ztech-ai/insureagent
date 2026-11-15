@@ -1,13 +1,47 @@
-# Development-only bootstrap; no database/queue is connected yet.
+# Internal synthetic-data Alpha. Never expose this stack publicly.
 services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: insureagent
+      POSTGRES_USER: insureagent
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set a local database password}
+    volumes:
+      - alpha-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U insureagent"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
   api:
+    image: insureagent:alpha
     build:
       context: ..
       dockerfile: infra/docker/Dockerfile.api
+    environment: &config
+      DATABASE_URL: postgresql+psycopg://insureagent:${POSTGRES_PASSWORD}@db/insureagent
+      ALPHA_DATA_KEY: ${ALPHA_DATA_KEY:?Set a base64 encoded 32 byte key}
     ports:
       - "127.0.0.1:8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
     read_only: true
-    tmpfs:
-      - /tmp
-    security_opt:
-      - no-new-privileges:true
+    tmpfs: [/tmp]
+    security_opt: ["no-new-privileges:true"]
+  worker:
+    image: insureagent:alpha
+    command: ["/app/.venv/bin/python", "scripts/run_worker.py"]
+    environment:
+      <<: *config
+      VOSK_MODEL_PATH: /models/vosk-model-small-cn-0.22
+    volumes:
+      - ${ASR_MODELS_DIR:-../models}:/models:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: ["no-new-privileges:true"]
+volumes:
+  alpha-db:

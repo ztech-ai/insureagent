@@ -2,6 +2,8 @@ import base64
 import hashlib
 import hmac
 import secrets
+import threading
+import time
 from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Request
@@ -12,6 +14,22 @@ from sqlalchemy import delete, insert, select
 
 router = APIRouter(prefix="/v1", tags=["identity"])
 bearer = HTTPBearer(auto_error=False)
+_login_lock = threading.Lock()
+_login_buckets = {}
+
+
+def limit_login(request):
+    # Per-process Alpha guard; production requires a shared edge/distributed limiter.
+    key = request.client.host if request.client else "unknown"
+    moment = time.monotonic()
+    with _login_lock:
+        for address in list(_login_buckets):
+            if moment - _login_buckets[address][0] >= 60:
+                del _login_buckets[address]
+        start, count = _login_buckets.get(key, (moment, 0))
+        if count >= 20 or (key not in _login_buckets and len(_login_buckets) >= 10000):
+            raise HTTPException(429, "login_rate_limited", headers={"Retry-After": "60"})
+        _login_buckets[key] = (start, count + 1)
 
 
 def password_hash(password, salt=None):
@@ -63,6 +81,7 @@ class Login(BaseModel):
 
 @router.post("/sessions")
 def login(body: Login, request: Request):
+    limit_login(request)
     store = store_for(request)
     # Alpha is private/local only. Accounts are provisioned via CLI, not public registration.
     with store.transaction() as conn:
@@ -82,7 +101,12 @@ def login(body: Login, request: Request):
                 token_hash=token_hash(token), tenant_id=account["id"], expires_at=expiry
             )
         )
-        return {"access_token": token, "token_type": "bearer", "expires_at": expiry}
+        return {
+            "account_id": account["id"],
+            "access_token": token,
+            "token_type": "bearer",
+            "expires_at": expiry,
+        }
 
 
 @router.delete("/sessions/current", status_code=204)
@@ -94,3 +118,16 @@ def logout(request: Request, tenant=Depends(principal), credentials=Depends(bear
                 sessions.c.token_hash == token_hash(credentials.credentials),
             )
         )
+
+
+@router.get("/usage")
+def usage(request: Request, tenant=Depends(principal)):
+    from insureagent_persistence.store import stage_usage
+
+    with store_for(request).transaction() as conn:
+        rows = conn.execute(select(stage_usage).where(stage_usage.c.tenant_id == tenant)).mappings()
+        totals = {"asr_seconds": 0, "extraction_characters": 0}
+        for row in rows:
+            key = "asr_seconds" if row["stage"] == "asr" else "extraction_characters"
+            totals[key] += row["units"]
+        return {"mode": "internal_alpha", "billable": False, "customer_limit": 1000, **totals}
