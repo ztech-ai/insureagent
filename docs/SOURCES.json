@@ -1,0 +1,15 @@
+{
+  "page_7dcdd51a66588191bcd1b1d1d21bf133": "docs/product/保险销售AI助手_需求与系统设计.md",
+  "page_fc0f9acaa1808191b838a5c811323ec6": "docs/architecture/00_设计总览与技术选型.md",
+  "page_c04694bd5be08191b54765686540011c": "docs/architecture/01_Agent编排与模型网关.md",
+  "page_ca07e5946dfc8191aeb762d9962da540": "docs/architecture/02_客户识别与事实更新.md",
+  "page_c50c1f74736c819189598bff50ccd91e": "docs/architecture/03_数据库与持久化.md",
+  "page_951b7d32e9f48191926e7b0649d26183": "docs/architecture/04_检索与客户记忆.md",
+  "page_cffcaafee06081919f0c104fa1d549a1": "docs/architecture/05_异步任务与一致性.md",
+  "page_f6b63edf0c64819184edf96b5c296b42": "docs/architecture/06_安全与隐私.md",
+  "page_20e6440805348191afc73686822deb41": "docs/architecture/07_部署与可用性.md",
+  "page_51eb0d2d8f18819197309f1bf23c97cf": "docs/architecture/08_容量与成本.md",
+  "page_c70feda95dcc819182ab551bf5832e7f": "docs/architecture/09_整体评审与修订清单.md",
+  "page_b3dcf233b4908191a1a61cedd2b33b97": "docs/architecture/10_移动端交互与界面规范.md",
+  "page_0618a023e1b48191b85afd1aded45ae3": "docs/architecture/11_产品开发计划.md"
+}

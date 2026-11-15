@@ -1,0 +1,7 @@
+analyzer:
+  errors:
+    unused_import: error
+linter:
+  rules:
+    avoid_print: true
+    use_key_in_widget_constructors: true

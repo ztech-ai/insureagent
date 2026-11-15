@@ -1,0 +1,65 @@
+{
+  "additionalProperties": false,
+  "description": "Metadata-only envelope. Never put customer text in queue messages.\n\nProducer and event_type are fixed allowlists; add entries via contract review.\nTenant identity is not authorization: consumers must check the authoritative DB.",
+  "properties": {
+    "event_id": {
+      "format": "uuid",
+      "title": "Event Id",
+      "type": "string"
+    },
+    "event_type": {
+      "pattern": "^record\\.stored$",
+      "title": "Event Type",
+      "type": "string"
+    },
+    "schema_version": {
+      "default": 1,
+      "maximum": 1,
+      "minimum": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "entity_id": {
+      "format": "uuid",
+      "title": "Entity Id",
+      "type": "string"
+    },
+    "entity_version": {
+      "minimum": 1,
+      "title": "Entity Version",
+      "type": "integer"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "title": "Occurred At",
+      "type": "string"
+    },
+    "trace_id": {
+      "format": "uuid",
+      "title": "Trace Id",
+      "type": "string"
+    },
+    "producer": {
+      "pattern": "^api$",
+      "title": "Producer",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "event_type",
+    "tenant_id",
+    "entity_id",
+    "entity_version",
+    "occurred_at",
+    "trace_id",
+    "producer"
+  ],
+  "title": "DomainEvent",
+  "type": "object"
+}

@@ -1,0 +1,266 @@
+<div id="insurance-mobile-prototype">
+  <div class="zk-preview-toolbar">
+    <span class="zk-preview-label">保知伴 AI · 移动端交互原型</span>
+    <span class="zk-preview-note">虚构示例</span>
+  </div>
+  <div class="zk-preview-pickers">
+    <label>页面<select id="zk-screen-picker" aria-label="预览页面"></select></label>
+    <label>场景<select id="zk-scenario-picker" aria-label="预览场景"><option value="normal">正常使用</option><option value="offline">网络不可用</option><option value="permission">麦克风被拒绝</option><option value="quota">语音额度用尽</option><option value="partial">整理暂未完成</option></select></label>
+  </div>
+  <div class="zk-stage viz-dotted-background">
+    <div class="zk-phone" aria-label="保知伴 AI手机界面">
+      <div class="zk-status"><span>9:41</span><span class="zk-island" aria-hidden="true"></span><span aria-label="电量百分之八十六">▰ 86%</span></div>
+      <div id="zk-app" class="zk-app-shell"></div>
+      <div class="zk-home-line" aria-hidden="true"></div>
+    </div>
+  </div>
+  <div id="zk-announcement" class="zk-sr" role="status" aria-live="polite"></div>
+</div>
+<style>
+#insurance-mobile-prototype { --zk-bg:light-dark(#f5f6f2,#121a18);--zk-surface:light-dark(#ffffff,#1c2723);--zk-ink:light-dark(#20352e,#e5eee8);--zk-secondary:light-dark(#627269,#a8b8ae);--zk-line:light-dark(#e1e6df,#35423b);--zk-green:light-dark(#23624d,#9fd5b6);--zk-on-green:light-dark(#ffffff,#102b20);--zk-soft:light-dark(#eaf2eb,#273e31);--zk-amber:light-dark(#806020,#e5bf74);--zk-amber-bg:light-dark(#fcf4e3,#3b3020);--zk-red:light-dark(#ad453e,#f2a29b);--zk-red-bg:light-dark(#fcf0ec,#422a27);--zk-shadow:light-dark(#243d2c12,#00000030);font-family:"Noto Sans CJK SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--zk-ink);font-size:15px;line-height:1.55;max-width:100%; }
+#insurance-mobile-prototype *{box-sizing:border-box}
+#insurance-mobile-prototype button,#insurance-mobile-prototype input,#insurance-mobile-prototype textarea,#insurance-mobile-prototype select{font:inherit;color:inherit}
+#insurance-mobile-prototype button {cursor:var(--cursor-interaction,pointer);min-height:44px;touch-action:manipulation}
+#insurance-mobile-prototype button:disabled{cursor:not-allowed;opacity:.46}
+#insurance-mobile-prototype h1,#insurance-mobile-prototype h2,#insurance-mobile-prototype h3,#insurance-mobile-prototype p{margin:0}
+#insurance-mobile-prototype .zk-preview-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:0 92px 12px 0;min-height:50px}
+#insurance-mobile-prototype .zk-preview-label{font-size:14px;font-weight:600}
+#insurance-mobile-prototype .zk-preview-note{font-size:12px;color:var(--zk-secondary)}
+#insurance-mobile-prototype .zk-preview-pickers{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+#insurance-mobile-prototype .zk-preview-pickers label{display:flex;align-items:center;gap:8px;font-size:13px}
+#insurance-mobile-prototype select{background:var(--zk-surface);border:1px solid var(--zk-line);border-radius:10px;min-height:44px;padding:8px 25px 8px 10px;max-width:100%}
+#insurance-mobile-prototype .zk-stage{padding:8px 0 18px;display:flex;justify-content:center}
+#insurance-mobile-prototype .zk-phone{width:min(100%,390px);border:1px solid var(--zk-line);border-radius:32px;background:var(--zk-bg);box-shadow:0 12px 36px var(--zk-shadow);overflow:clip;position:relative}
+#insurance-mobile-prototype .zk-status{height:44px;display:flex;justify-content:space-between;align-items:center;padding:0 25px;font-size:12px;font-weight:600;background:var(--zk-bg)}
+#insurance-mobile-prototype .zk-island{width:72px;height:19px;border-radius:20px;background:var(--zk-ink)}
+#insurance-mobile-prototype .zk-app-shell{min-height:710px;display:flex;flex-direction:column}
+#insurance-mobile-prototype .zk-main{padding:0 20px 20px;flex:1;min-width:0}
+#insurance-mobile-prototype .zk-header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 16px 12px;min-height:65px}
+#insurance-mobile-prototype .zk-header h1{font-size:19px;letter-spacing:-.3px;font-weight:650;line-height:1.35}
+#insurance-mobile-prototype .zk-back{border:0;background:transparent;min-width:44px;padding:6px 8px;font-size:23px}
+#insurance-mobile-prototype .zk-header-title{flex:1}
+#insurance-mobile-prototype .zk-micro{font-size:12px;color:var(--zk-secondary);line-height:1.6}
+#insurance-mobile-prototype .zk-muted{color:var(--zk-secondary)}
+#insurance-mobile-prototype .zk-greeting{font-size:25px;font-weight:650;letter-spacing:-.8px;margin:4px 0 5px}
+#insurance-mobile-prototype .zk-overline{font-size:12px;font-weight:600;letter-spacing:1.3px;color:var(--zk-secondary)}
+#insurance-mobile-prototype .zk-spacer{height:20px}
+#insurance-mobile-prototype .zk-card{background:var(--zk-surface);border:1px solid var(--zk-line);border-radius:18px;padding:17px;margin-top:12px}
+#insurance-mobile-prototype .zk-card h2{font-size:17px;font-weight:600;line-height:1.5}
+#insurance-mobile-prototype .zk-card h3{font-size:15px;font-weight:600}
+#insurance-mobile-prototype .zk-card p + p{margin-top:8px}
+#insurance-mobile-prototype .zk-section-heading{display:flex;align-items:center;justify-content:space-between;gap:6px;margin:22px 0 8px}
+#insurance-mobile-prototype .zk-section-heading h2{font-size:17px;font-weight:600}
+#insurance-mobile-prototype .zk-row{display:flex;align-items:center;gap:10px;min-width:0}
+#insurance-mobile-prototype .zk-between{justify-content:space-between}
+#insurance-mobile-prototype .zk-grow{flex:1;min-width:0}
+#insurance-mobile-prototype .zk-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+#insurance-mobile-prototype .zk-actions>*{flex:1;min-width:100px}
+#insurance-mobile-prototype .zk-primary{border:1px solid var(--zk-green);background:var(--zk-green);color:var(--zk-on-green);border-radius:12px;font-size:15px;font-weight:600;min-height:48px;padding:10px 17px}
+#insurance-mobile-prototype .zk-secondary{border:1px solid var(--zk-line);background:var(--zk-surface);border-radius:12px;padding:10px 16px;font-size:15px}
+#insurance-mobile-prototype .zk-text-button{border:0;background:transparent;padding:8px 3px;color:var(--zk-green);font-size:13px;font-weight:500;white-space:normal}
+#insurance-mobile-prototype .zk-block{display:block;width:100%;margin-top:14px}
+#insurance-mobile-prototype .zk-hero{background:var(--zk-green);color:var(--zk-on-green);border-radius:20px;padding:20px;margin-top:20px;position:relative}
+#insurance-mobile-prototype .zk-hero h2{font-size:19px;font-weight:600;line-height:1.4}
+#insurance-mobile-prototype .zk-hero p{font-size:13px;margin-top:5px}
+#insurance-mobile-prototype .zk-hero-action{background:var(--zk-on-green);color:var(--zk-green);border:0;border-radius:11px;padding:10px 16px;font-weight:600;width:100%;margin-top:17px;display:flex;align-items:center;justify-content:center;gap:10px}
+#insurance-mobile-prototype .zk-mini-wave{display:flex;gap:3px;align-items:center;height:20px}
+#insurance-mobile-prototype .zk-mini-wave b{display:block;width:3px;border-radius:3px;background:currentColor}
+#insurance-mobile-prototype .zk-list-button{display:flex;align-items:center;gap:12px;text-align:left;width:100%;background:transparent;border:0;padding:14px 0;border-bottom:1px solid var(--zk-line)}
+#insurance-mobile-prototype .zk-list-button:last-child{border-bottom:0}
+#insurance-mobile-prototype .zk-avatar{width:42px;height:42px;flex-shrink:0;border-radius:14px;background:var(--zk-soft);color:var(--zk-green);display:grid;place-items:center;font-size:16px;font-weight:600}
+#insurance-mobile-prototype .zk-avatar-large{width:58px;height:58px;border-radius:20px;font-size:22px}
+#insurance-mobile-prototype .zk-chevron{font-size:20px;color:var(--zk-secondary);padding-left:4px}
+#insurance-mobile-prototype .zk-name{font-weight:600;font-size:16px}
+#insurance-mobile-prototype .zk-chip{display:inline-block;padding:4px 8px;border-radius:7px;background:var(--zk-soft);color:var(--zk-green);font-size:12px;line-height:1.4;font-weight:500}
+#insurance-mobile-prototype .zk-chip-warn{background:var(--zk-amber-bg);color:var(--zk-amber)}
+#insurance-mobile-prototype .zk-note{padding:12px 14px;border-radius:12px;background:var(--zk-soft);font-size:13px;line-height:1.65;margin:12px 0;color:var(--zk-green)}
+#insurance-mobile-prototype .zk-note-warn{background:var(--zk-amber-bg);color:var(--zk-amber)}
+#insurance-mobile-prototype .zk-note-error{background:var(--zk-red-bg);color:var(--zk-red)}
+#insurance-mobile-prototype .zk-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;border-top:1px solid var(--zk-line);background:var(--zk-surface);padding:10px 12px 6px;margin-top:auto}
+#insurance-mobile-prototype .zk-nav button{border:0;background:transparent;color:var(--zk-secondary);border-radius:12px;min-height:48px;font-size:14px;font-weight:500}
+#insurance-mobile-prototype .zk-nav button[aria-current=page]{color:var(--zk-green);background:var(--zk-soft);font-weight:650}
+#insurance-mobile-prototype .zk-home-line{height:5px;width:104px;border-radius:4px;background:var(--zk-ink);margin:9px auto 10px;opacity:.8}
+#insurance-mobile-prototype .zk-search{border:1px solid var(--zk-line);background:var(--zk-surface);border-radius:12px;width:100%;padding:12px 14px;min-height:46px;font-size:16px}
+#insurance-mobile-prototype .zk-filters{display:flex;gap:6px;margin:14px 0 6px;flex-wrap:wrap}
+#insurance-mobile-prototype .zk-filter{border:1px solid var(--zk-line);background:var(--zk-surface);border-radius:10px;padding:8px 12px;font-size:13px}
+#insurance-mobile-prototype .zk-filter[aria-pressed=true]{background:var(--zk-soft);color:var(--zk-green);border-color:var(--zk-green)}
+#insurance-mobile-prototype .zk-inline-source{font-size:12px;color:var(--zk-green);text-decoration:underline;text-underline-offset:3px;background:transparent;border:0;padding:7px 0;text-align:left}
+#insurance-mobile-prototype .zk-field{display:block;font-size:13px;color:var(--zk-secondary);margin-top:16px}
+#insurance-mobile-prototype .zk-field input,#insurance-mobile-prototype .zk-field textarea,#insurance-mobile-prototype .zk-field select{display:block;width:100%;margin-top:7px;padding:12px;border:1px solid var(--zk-line);background:var(--zk-surface);border-radius:11px;color:var(--zk-ink);font-size:16px;min-width:0}
+#insurance-mobile-prototype textarea{resize:vertical;min-height:120px;line-height:1.7}
+#insurance-mobile-prototype .zk-check{display:flex;align-items:flex-start;gap:10px;min-height:52px;padding:13px 0;border-bottom:1px solid var(--zk-line);font-size:14px}
+#insurance-mobile-prototype .zk-check:last-child{border-bottom:0}
+#insurance-mobile-prototype input[type=checkbox],#insurance-mobile-prototype input[type=radio]{appearance:auto;width:20px;height:20px;flex-shrink:0;margin:2px 0 0;accent-color:var(--zk-green)}
+#insurance-mobile-prototype .zk-choice{display:flex;align-items:center;gap:10px;border:1px solid var(--zk-line);border-radius:12px;background:var(--zk-surface);padding:12px;margin:8px 0;min-height:60px;font-size:14px}
+#insurance-mobile-prototype .zk-choice:has(input:checked){border-color:var(--zk-green);background:var(--zk-soft)}
+#insurance-mobile-prototype .zk-record-center{text-align:center;padding:27px 0 21px}
+#insurance-mobile-prototype .zk-record-orb{width:88px;height:88px;border-radius:50%;display:grid;place-items:center;background:var(--zk-soft);color:var(--zk-green);margin:0 auto 18px}
+#insurance-mobile-prototype .zk-record-orb .zk-mini-wave{height:36px;gap:5px}
+#insurance-mobile-prototype .zk-record-orb .zk-mini-wave b{width:5px}
+#insurance-mobile-prototype .zk-timer{font-size:38px;letter-spacing:2px;line-height:1.3;font-weight:500;font-variant-numeric:tabular-nums}
+#insurance-mobile-prototype .zk-quote{border-left:3px solid var(--zk-line);padding:2px 0 2px 13px;margin-top:12px;font-size:14px;line-height:1.85}
+#insurance-mobile-prototype .zk-steps{display:flex;align-items:center;justify-content:space-between;gap:4px;margin-bottom:12px;color:var(--zk-secondary);font-size:12px}
+#insurance-mobile-prototype .zk-steps span:first-child{color:var(--zk-green)}
+#insurance-mobile-prototype .zk-facts{display:grid;grid-template-columns:64px 1fr;gap:13px 12px;font-size:14px;margin:17px 0 8px}
+#insurance-mobile-prototype .zk-facts dt{color:var(--zk-secondary)}
+#insurance-mobile-prototype .zk-facts dd{margin:0;overflow-wrap:anywhere}
+#insurance-mobile-prototype .zk-timeline{position:relative;margin:12px 0 0 5px;padding:0 0 15px 17px;border-left:1px solid var(--zk-line)}
+#insurance-mobile-prototype .zk-timeline::before{content:"";position:absolute;left:-4px;top:7px;width:7px;height:7px;border-radius:100%;background:var(--zk-green)}
+#insurance-mobile-prototype .zk-timeline p{font-size:14px;margin:6px 0}
+#insurance-mobile-prototype .zk-time{font-size:12px;color:var(--zk-secondary);font-variant-numeric:tabular-nums}
+#insurance-mobile-prototype .zk-task-time{font-size:22px;font-weight:500;letter-spacing:-.5px}
+#insurance-mobile-prototype .zk-task{padding:16px;border:1px solid var(--zk-line);border-radius:16px;background:var(--zk-surface);margin-top:10px}
+#insurance-mobile-prototype .zk-task h3{font-size:16px;font-weight:600;margin-top:9px}
+#insurance-mobile-prototype .zk-task .zk-actions{margin-top:12px}
+#insurance-mobile-prototype .zk-soft-cta{padding:12px 15px;display:flex;gap:12px;align-items:center;border:1px solid var(--zk-line);background:var(--zk-surface);border-radius:14px;width:100%;text-align:left;margin-top:15px}
+#insurance-mobile-prototype .zk-small-logo{font-size:22px;font-weight:500;color:var(--zk-green)}
+#insurance-mobile-prototype .zk-answer{background:var(--zk-surface);padding:16px;border-radius:16px;border:1px solid var(--zk-line);margin-top:16px;font-size:14px;line-height:1.85}
+#insurance-mobile-prototype .zk-question{background:var(--zk-soft);border-radius:14px;padding:12px 14px;margin:18px 0 0 30px;font-size:14px;color:var(--zk-green)}
+#insurance-mobile-prototype .zk-usage{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--zk-line);font-size:14px}
+#insurance-mobile-prototype .zk-usage:last-child{border:0}
+#insurance-mobile-prototype .zk-bar{height:5px;border-radius:4px;background:var(--zk-line);margin:13px 0 8px;overflow:hidden}
+#insurance-mobile-prototype .zk-bar span{height:100%;display:block;background:var(--zk-green)}
+#insurance-mobile-prototype .zk-danger{color:var(--zk-red)}
+#insurance-mobile-prototype .zk-danger-button{color:var(--zk-red);border:1px solid var(--zk-red);border-radius:12px;padding:10px 16px;background:var(--zk-surface)}
+#insurance-mobile-prototype .zk-notice{font-size:13px;padding:10px 20px;background:var(--zk-soft);color:var(--zk-green);border-bottom:1px solid var(--zk-line)}
+#insurance-mobile-prototype .zk-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+#insurance-mobile-prototype .zk-large{font-size:17px}
+#insurance-mobile-prototype .zk-large .zk-main{font-size:17px}
+#insurance-mobile-prototype .zk-large .zk-card p,#insurance-mobile-prototype .zk-large .zk-check,#insurance-mobile-prototype .zk-large .zk-facts{font-size:16px}
+@media(max-width:360px){#insurance-mobile-prototype .zk-main{padding-left:15px;padding-right:15px}#insurance-mobile-prototype .zk-phone{border-radius:24px}#insurance-mobile-prototype .zk-card{padding:14px}#insurance-mobile-prototype .zk-greeting{font-size:23px}#insurance-mobile-prototype .zk-preview-pickers{gap:8px}#insurance-mobile-prototype .zk-preview-pickers label{flex:1;min-width:134px;display:block}#insurance-mobile-prototype .zk-preview-pickers select{width:100%;margin-top:5px}}
+</style>
+<script>
+(() => {
+ const root=document.getElementById('insurance-mobile-prototype');
+ const app=root.querySelector('#zk-app');
+ const picker=root.querySelector('#zk-screen-picker');
+ const scenarioPicker=root.querySelector('#zk-scenario-picker');
+ const screens={today:'今天',record:'口述记录',confirm:'确认归档',customers:'客户列表',customer:'客户详情',insight:'建议与计划',tasks:'跟进安排',assistant:'客户助手',me:'我的与套餐',privacy:'隐私与数据'};
+ const state={screen:'today',scenario:'normal',history:[],paused:false,chosen:'',facts:new Set(),archived:false,activeName:'陈敏',activeId:'CX-0042',contact:'normal',taskAdded:false,taskDone:false,taskPostponed:false,zhouDone:false,zhouPostponed:false,zhouOutcome:'',completingZhou:false,taskOutcome:'',revoked:false,taskTitle:'核实家庭保障需求',taskDate:'2026-11-16',taskTime:'19:30',channel:'微信',outcome:'',filter:'all',taskFilter:'today',search:'',note:'',sourceEdited:false,textMode:false,recordText:'今天见了陈敏，她提到孩子刚上小学，想先了解家庭保障。她还没确定预算，希望下周一晚上再聊。',question:'',answered:false,audioRetention:'delete',push:true,deleted:false,deleteConfirmed:false};
+ const design={largeText:false,recordFirst:true};
+ const wave=()=>'<span class="zk-mini-wave" aria-hidden="true">'+[9,18,27,17,33,22,12].map(h=>`<b style="height:${h}px"></b>`).join('')+'</span>';
+ const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const button=(label,action,cls='zk-primary',extra='')=>`<button class="${cls}" data-action="${action}" ${extra}>${label}</button>`;
+ const goButton=(label,to,cls='zk-text-button')=>`<button class="${cls}" data-go="${to}">${label}</button>`;
+ const badge=(text,warn=false)=>`<span class="zk-chip${warn?' zk-chip-warn':''}">${text}</span>`;
+ const sourceButton=()=>button('依据：11 月 13 日沟通记录 ↗','source','zk-inline-source');
+ const header=(title,sub='',back=true,right='')=>`<header class="zk-header">${back?button('‹','back','zk-back','aria-label="返回"'):''}<div class="zk-header-title"><h1>${title}</h1>${sub?`<p class="zk-micro">${sub}</p>`:''}</div>${right}</header>`;
+ const nav=active=>`<nav class="zk-nav" aria-label="主导航">${[['today','今天'],['customers','客户'],['tasks','跟进'],['me','我的']].map(([s,t])=>`<button data-go="${s}" ${active===s?'aria-current="page"':''}>${t}</button>`).join('')}</nav>`;
+ const n=()=>esc(state.activeName);
+ const notify=text=>{state.note=text;root.querySelector('#zk-announcement').textContent=text;};
+ const restore=value=>{const p=value?.privateContent;if(p&&screens[p.screen])state.screen=p.screen;if(typeof p?.largeText==='boolean')design.largeText=p.largeText;if(typeof p?.recordFirst==='boolean')design.recordFirst=p.recordFirst;};
+ restore(window.openai?.widgetState);
+ const persist=()=>{if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{prototype:'保知伴 AI移动端',screen:screens[state.screen]||state.screen},privateContent:{screen:screens[state.screen]?state.screen:'today',largeText:design.largeText,recordFirst:design.recordFirst}}).catch(()=>{});};
+ picker.innerHTML=Object.entries(screens).map(([s,t])=>`<option value="${s}">${t}</option>`).join('');
+ function navigate(screen){if(state.screen!==screen)state.history.push(state.screen);state.screen=screen;state.note='';render();persist();}
+ function today(){
+  const hero=`<section class="zk-hero"><div class="zk-row zk-between"><div><h2>聊过的，随手记下来</h2><p>客户情况、沟通要点、下一步安排</p></div></div>${button(wave()+'记录一次沟通','record','zk-hero-action')}</section>`;
+  const next=`<div class="zk-section-heading"><h2>今天要跟进</h2>${goButton('全部 →','tasks')}</div><div class="zk-card" style="margin-top:0"><div class="zk-row"><span class="zk-avatar">周</span><div class="zk-grow"><div class="zk-name">周先生</div><p class="zk-micro">16:00 · 电话 · 已约定时间</p></div>${badge('待联系')}</div><p style="margin-top:13px;font-size:14px">确认家庭保障资料是否准备齐全</p>${goButton('查看跟进准备 →','tasks')}</div>`;
+  return header('保知伴 AI','保险人的 AI 客户经营助手',false,goButton('助手 ↗','assistant'))+`<main class="zk-main"><div class="zk-overline">11 月 15 日 · 星期日</div><div class="zk-greeting">把今天的联系，记清楚。</div><p class="zk-micro">每次沟通，都为下一次做好准备</p>${design.recordFirst?hero+next:next+hero}<button class="zk-soft-cta" data-go="confirm"><span class="zk-avatar">待</span><span class="zk-grow"><strong>${state.archived?'记录已归档':'1 条记录待你确认'}</strong><br><span class="zk-micro">${state.archived?'客户和事实分别保留确认结果':'陈敏 · 有同名客户，需要你选择'}</span></span><span class="zk-chevron">›</span></button><div class="zk-section-heading"><h2>最近联系</h2>${goButton('客户 →','customers')}</div><button class="zk-list-button" data-go="customer"><span class="zk-avatar">陈</span><span class="zk-grow"><span class="zk-name">${n()}</span><br><span class="zk-micro">家庭保障 · 周一晚上方便沟通</span></span><span class="zk-micro">2 天前</span></button></main>`+nav('today');
+ }
+ function record(){
+  let status='示例录音中';let alert='';
+  if(state.scenario==='offline')alert='<div class="zk-note zk-note-warn">当前离线。录音将留在本机草稿，联网后继续上传。</div>';
+  if(state.scenario==='quota')alert='<div class="zk-note zk-note-warn">本月云端转写额度已用完。可以保留本机草稿，历史资料和手动跟进仍可使用。</div>';
+  if(state.scenario==='permission')return header('记录一次沟通')+`<main class="zk-main"><div class="zk-record-center"><div class="zk-record-orb">文字</div><h2 style="font-size:20px">还没有麦克风权限</h2><p class="zk-muted" style="font-size:14px;margin-top:12px">你仍然可以用文字记录客户情况。</p></div><label class="zk-field">沟通内容<textarea id="zk-record-text">${esc(state.recordText)}</textarea></label>${button('保存文字并整理','finish-record','zk-primary zk-block')}${button('查看开启方法','permission-help','zk-secondary zk-block')}<p class="zk-micro" style="margin-top:14px">在系统设置中找到保知伴 AI，开启麦克风权限。此原型不读取麦克风。</p></main>`;
+  if(state.paused)status='示例录音已暂停';
+  return header('记录一次沟通','记录后可编辑文字')+`<main class="zk-main">${alert}${state.textMode?`<label class="zk-field">沟通内容<textarea id="zk-record-text">${esc(state.recordText)}</textarea></label>`:`<div class="zk-record-center"><div class="zk-record-orb">${wave()}</div><div class="zk-timer">00:38</div><p class="zk-micro" style="margin-top:9px">${status} · 最长 10 分钟</p></div><section class="zk-card"><h2>可以说说这些</h2><p class="zk-muted" style="font-size:14px;margin-top:8px">见了哪位客户？聊到了什么？<br>有没有约好下一次联系？</p></section><div class="zk-actions">${button(state.paused?'继续录音':'暂停','pause','zk-secondary')}${button('完成记录','finish-record')}</div>`}${state.textMode?button('保存文字并整理','finish-record','zk-primary zk-block'):button('改用文字记录','text-mode','zk-text-button zk-block')}<div class="zk-spacer"></div><p class="zk-micro">处理方式：由云端服务转写<br>录音保留：转写后删除 · ${goButton('调整','privacy')}</p><p class="zk-micro">演示音频，不调用麦克风。</p></main>`;
+ }
+ function confirm(){
+  if(state.scenario==='partial')return header('记录已保存')+`<main class="zk-main"><div class="zk-note zk-note-warn">文字已保存，信息整理暂未完成。重试不会重复扣除已完成的转写额度。</div><section class="zk-card"><h2>沟通原文</h2><p class="zk-quote">${esc(state.recordText)}</p></section>${button('重试信息整理','retry','zk-primary zk-block')}${button('编辑已保存文字','edit-transcript','zk-secondary zk-block')}${goButton('稍后处理','today','zk-text-button zk-block')}</main>`;
+  return header('确认归档','已保存到云端 · 需你确认')+`<main class="zk-main"><div class="zk-steps"><span>✓ 文字已保存</span><span>选择客户</span><span>确认事实</span></div><div class="zk-note zk-note-warn">找到 2 位同名客户，请先选择本次沟通对象。</div><section><h2 style="font-size:16px;margin:16px 0 7px">这次说的是哪位陈敏？</h2>${[['existing','陈敏','家庭保障 · 尾号 2186 · 11 月 13 日联系'],['another','陈敏','退休规划 · 尾号 9073 · 10 月 28 日联系'],['new','新建客户陈敏','与已有客户分别管理']].map(([v,t,d])=>`<label class="zk-choice"><input type="radio" name="zk-person" value="${v}" ${state.chosen===v?'checked':''}><span><strong>${t}</strong><br><span class="zk-micro">${d}</span></span></label>`).join('')}</section><section class="zk-card"><div class="zk-row zk-between"><h2>提取的信息</h2>${badge('待确认',true)}</div><p class="zk-micro" style="margin-top:6px">仅勾选你核实过的内容</p>${[['school','孩子刚上小学'],['need','希望先了解家庭保障'],['budget','预算尚未确定']].map(([id,t])=>`<label class="zk-check"><input type="checkbox" data-fact="${id}" ${state.facts.has(id)?'checked':''}><span>${t}<br><span class="zk-micro">来源：本次口述记录</span></span></label>`).join('')}</section><details style="margin-top:14px;font-size:14px"><summary style="min-height:44px;padding:10px 0">查看完整转写</summary><p class="zk-quote">${esc(state.recordText)}</p></details><div class="zk-note">“周一晚上再聊”将保留为待安排事项。归档不会自动创建联系任务。</div>${button(state.facts.size?`归档并确认 ${state.facts.size} 项`:'仅归档到所选客户','archive','zk-primary zk-block',state.chosen?'':'disabled')}<p class="zk-micro" style="margin-top:9px;text-align:center">未选中的信息继续保留为待确认</p></main>`;
+ }
+ const people=[{name:'陈敏',initial:'陈',desc:'家庭保障 · 下周一晚上再聊',stage:'需求了解',time:'2 天前',id:'CX-0042'},{name:'周先生',initial:'周',desc:'资料准备 · 今天 16:00 已约定',stage:'待跟进',time:'昨天',id:'CX-0021'},{name:'李女士',initial:'李',desc:'保单服务 · 核实年度联系时间',stage:'持续服务',time:'5 天前',id:'CX-0016'},{name:'陈敏',initial:'陈',desc:'退休规划 · 尾号 9073',stage:'需求了解',time:'10 月 28 日',id:'CX-0039'}];
+ function listItems(){let list=people.filter(p=>(state.filter==='all'||p.stage===state.filter)&&(!state.search||(p.name+p.desc+p.id).includes(state.search)));return list.length?list.map(p=>`<button class="zk-list-button" data-customer="${p.id}"><span class="zk-avatar">${p.initial}</span><span class="zk-grow"><span class="zk-name">${p.name}</span><br><span class="zk-micro">${p.desc}</span><br><span class="zk-micro">${p.stage} · ${p.id}</span></span><span class="zk-time">${p.time}</span></button>`).join(''):'<div class="zk-note">没有找到匹配客户，可以换个关键词或手动建档。</div>';}
+ function customers(){return header('客户','42 位客户 · 资料仅对你可见',false,goButton('＋ 新建','new-customer'))+`<main class="zk-main"><label class="zk-sr" for="zk-search">搜索姓名、需求或客户编号</label><input id="zk-search" class="zk-search" placeholder="搜索姓名、需求或客户编号" value="${esc(state.search)}"><div class="zk-filters">${[['all','全部'],['待跟进','待跟进'],['需求了解','需求了解'],['持续服务','持续服务']].map(([v,t])=>`<button class="zk-filter" data-filter="${v}" aria-pressed="${state.filter===v}">${t}</button>`).join('')}</div><div id="zk-customer-list">${listItems()}</div><div class="zk-spacer"></div><p class="zk-micro">客户阶段由你设置，AI 不会自动标记成交。</p></main>`+nav('customers');}
+ function customer(){
+  const isChen=state.activeId==='CX-0042'||state.activeId==='CX-0043';
+  return header('客户详情','',true,goButton('联系偏好','contact'))+`<main class="zk-main"><div class="zk-row" style="margin-top:4px"><span class="zk-avatar zk-avatar-large">${n().slice(0,1)}</span><div class="zk-grow"><h2 style="font-size:24px">${n()}</h2><p class="zk-micro">${esc(state.activeId)} · ${isChen?'尾号 2186':'联系信息已隐藏'}</p></div>${badge('需求了解')}</div>${state.contact!=='normal'?'<div class="zk-note zk-note-warn">'+(state.contact==='never'?'不再主动联系':'已暂停联系')+' · 主动建议和提醒已停止，档案仍可查看。</div>':''}<div class="zk-actions">${button('记录沟通','record')}${goButton('问问助手','assistant','zk-secondary')}</div><section class="zk-card"><div class="zk-row zk-between"><h2>客户情况</h2>${badge('已确认')}</div><dl class="zk-facts"><dt>关注方向</dt><dd>${isChen?'家庭保障':'有待核实'}</dd><dt>沟通偏好</dt><dd>${isChen?'微信 · 工作日晚上':'尚未确认'}</dd><dt>当前进度</dt><dd>${isChen?'先了解需求，预算待核实':'需求了解中'}</dd></dl>${sourceButton()}</section>${isChen?`<section class="zk-card"><div class="zk-row zk-between"><h2>下一次，可以这样聊</h2>${badge(state.sourceEdited?'待更新':'AI 建议',state.sourceEdited)}</div><p style="margin-top:10px;font-size:14px">先确认家庭已有保障和最关心的问题，再讨论需要补充的信息。</p>${goButton('查看依据与建议 →','insight')}</section>`:''}<div class="zk-section-heading"><h2>沟通时间线</h2>${goButton('全部记录','inbox')}</div>${state.archived?`<div class="zk-timeline"><span class="zk-time">今天 09:41 · 口述记录</span><p>已归档本次沟通，确认 ${state.facts.size} 项事实。</p>${button('查看记录','latest-source','zk-inline-source')}</div>`:''}<div class="zk-timeline"><span class="zk-time">11 月 13 日 · 微信沟通</span><p>${isChen?'想先了解家庭保障，约下周一晚上再聊。':'客户情况仍需进一步核实。'}</p>${sourceButton()}</div></main>`;
+ }
+ function insight(){return header('下一次联系建议',`${n()} · 更新于今天 08:20`)+`<main class="zk-main">${badge('AI 建议')}<h2 style="font-size:23px;line-height:1.5;margin-top:15px">先了解保障现状，<br>再讨论具体方案。</h2><section class="zk-card"><h2>为什么现在聊</h2><p style="font-size:14px;margin-top:10px">陈敏明确提到想先了解家庭保障，并约定周一晚上继续聊。</p>${sourceButton()}<p class="zk-micro">尚不清楚：现有保单、预算与家庭保障缺口</p></section><section class="zk-card"><h2>可以这样开场</h2><p class="zk-quote">“上次聊到想了解家庭保障，我们先一起看看目前已有的保障，再说说你最关心的事情，好吗？”</p></section><div class="zk-section-heading"><h2>先核实两件事</h2></div><p style="font-size:14px;line-height:1.9">① 家庭成员目前有哪些已有保障？<br>② 希望优先解决什么担忧？</p>${state.sourceEdited?'<div class="zk-note zk-note-warn">来源已更正，建议需要重新生成。</div>'+button('更新建议','regenerate','zk-primary zk-block'):state.contact!=='normal'?'<div class="zk-note zk-note-warn">客户已暂停或拒绝主动联系，暂不能加入经营跟进。</div>'+goButton('查看联系偏好','contact','zk-secondary zk-block'):goButton('加入跟进 · 先确认时间','task-edit','zk-primary zk-block')}<p class="zk-micro" style="margin-top:12px">建议供你参考。需核实实际需求后再讨论产品；不会自动向客户发消息。</p>${button('这条建议不合适','feedback','zk-text-button zk-block')}</main>`;}
+ function tasks(){
+  let task=state.taskAdded?`<section class="zk-task"><div class="zk-row zk-between"><span class="zk-task-time">${esc(state.taskTime)}</span>${badge(state.taskDone?'已完成':state.taskPostponed?'已延期':'已安排')}</div><h3>${n()} · ${esc(state.taskTitle)}</h3><p class="zk-micro">${esc(state.taskDate)} · ${esc(state.channel)} · ${state.contact==='normal'?'应用内与推送提醒':'提醒已暂停'}</p>${state.taskDone?`<p class="zk-note">联系结果：${esc(state.taskOutcome||'已联系')}</p>`:`<div class="zk-actions">${button('记录结果','complete','zk-primary')}${button('延期一天','postpone','zk-secondary')}</div>`}</section>`:'';
+  if(state.taskFilter==='today')task='';
+  return header('跟进','每一次联系，都有后续',false,goButton('＋ 新建','task-edit'))+`<main class="zk-main"><div class="zk-filters">${[['today','今天 · 1'],['future','未来'],['all','全部']].map(([v,t])=>`<button class="zk-filter" data-task-filter="${v}" aria-pressed="${state.taskFilter===v}">${t}</button>`).join('')}</div>${!state.push?'<div class="zk-note zk-note-warn">系统通知已关闭，提醒仍保留在这里。</div>':''}${(state.taskFilter==='all'||(state.taskFilter==='today'&&!state.zhouPostponed)||(state.taskFilter==='future'&&state.zhouPostponed))?`<section class="zk-task"><div class="zk-row zk-between"><span class="zk-task-time">16:00</span>${badge(state.zhouDone?'已完成':state.zhouPostponed?'已延期':'待联系')}</div><h3>周先生 · 核实资料准备情况</h3><p class="zk-micro">${state.zhouPostponed?'明天':'今天'} · 电话 · 已约定时间</p>${state.zhouDone?'<p class="zk-note">联系结果：'+esc(state.zhouOutcome)+'</p>':'<div class="zk-actions">'}${state.zhouDone?'':button('记录结果','complete-zhou')+button('延期一天','postpone-zhou','zk-secondary')+'</div>'}</section>`:''}${task}${state.taskFilter==='future'&&!task&&!state.zhouPostponed?'<div class="zk-card"><h2>给下一次联系留个位置</h2><p class="zk-muted" style="margin-top:8px;font-size:14px">暂时没有未来安排。你可以手动新建，或从客户建议中确认一项计划。</p>'+goButton('手动安排跟进','task-edit','zk-text-button')+'</div>':''}<div class="zk-section-heading"><h2>需要你决定</h2></div><div class="zk-card" style="margin-top:0"><div class="zk-row zk-between"><h3>${n()} · 家庭保障</h3>${badge('建议',true)}</div><p class="zk-micro" style="margin-top:8px">客户提到周一晚上方便，具体时间待确认。</p>${goButton('查看建议 →','insight')}</div><p class="zk-micro" style="margin-top:20px">任务完成后记录联系结果，后续计划由你决定。</p></main>`+nav('tasks');
+ }
+ function taskEdit(){return header('安排一次跟进','确认后才会创建提醒')+`<main class="zk-main"><div class="zk-note">客户：${n()} · ${esc(state.activeId)}</div><label class="zk-field">跟进事项<input id="zk-task-title" value="${esc(state.taskTitle)}" maxlength="80"></label><label class="zk-field">日期<input type="date" id="zk-task-date" value="${esc(state.taskDate)}"></label><div class="zk-row"><label class="zk-field zk-grow">时间<input type="time" id="zk-task-time" value="${esc(state.taskTime)}"></label><label class="zk-field zk-grow">联系渠道<select id="zk-task-channel">${['微信','电话','见面','其他'].map(c=>`<option ${state.channel===c?'selected':''}>${c}</option>`).join('')}</select></label></div><label class="zk-check" style="margin-top:12px"><input type="checkbox" checked id="zk-remind"><span>提前 30 分钟提醒我<br><span class="zk-micro">时区：上海 UTC+8</span></span></label><div class="zk-note">将创建待办和提醒，不会发送客户消息。</div>${button('确认创建跟进','save-task','zk-primary zk-block')}${state.contact!=='normal'?'<p class="zk-micro zk-danger" style="margin-top:12px">当前客户已限制主动联系，创建前需要调整联系偏好。</p>':''}</main>`;}
+ function complete(){return header('记录联系结果',`${state.completingZhou?'周先生':n()} · 本次跟进`)+`<main class="zk-main"><h2 style="font-size:21px;margin:16px 0">这次联系怎么样？</h2>${['已联系','未接通','客户要求改期','其他'].map(v=>`<label class="zk-choice"><input type="radio" name="zk-outcome" value="${v}" ${state.outcome===v?'checked':''}>${v}</label>`).join('')}<label class="zk-field">补充说明（可选）<textarea id="zk-outcome-note" placeholder="记录结果和客户约定…"></textarea></label>${button('保存结果并完成','save-outcome','zk-primary zk-block',state.outcome?'':'disabled')}<p class="zk-micro" style="margin-top:12px">未接通也会保留本次尝试结果。新的跟进时间由你安排。</p></main>`;}
+ function assistant(){return header('客户助手','基于你有权查看的客户记录')+`<main class="zk-main"><div class="zk-note">检索范围：${n()} · 已确认资料与可访问记录</div><div class="zk-question">${esc(state.question||'下次跟陈敏聊什么比较合适？')}</div><section class="zk-answer"><div class="zk-row" style="margin-bottom:12px"><span class="zk-small-logo">知</span><strong>可以从保障现状聊起</strong></div><p>她提到想先了解家庭保障，并约定下周一晚上再聊。建议先核实已有保障与主要担忧，再讨论下一步。</p>${sourceButton()}<p class="zk-muted" style="margin-top:10px">记录里没有已确认的预算和完整保单信息，暂时不能据此推荐具体产品。</p></section>${state.answered?'<div class="zk-note">演示回答：原型仅展示固定示例，不调用 AI。正式回答会注明来源、检索范围及缺失信息。</div>':''}<div class="zk-actions">${goButton('查看建议','insight','zk-secondary')}${button('纠正来源','edit-source','zk-secondary')}</div><label class="zk-field">继续问问客户助手<textarea id="zk-question" placeholder="例如：哪些信息还需要我核实？" style="min-height:85px"></textarea></label>${button('发送问题（演示）','ask','zk-primary zk-block')}<p class="zk-micro" style="margin-top:12px">当前仅引用相关记录；未检索到的信息不表示客户没有该情况。</p></main>`;}
+ function me(){return header('我的','资料和使用偏好',false)+`<main class="zk-main"><div class="zk-row" style="margin:8px 0 20px"><span class="zk-avatar zk-avatar-large">林</span><div><h2 style="font-size:21px">林女士</h2><p class="zk-micro">个人工作空间 · 账号尾号 1028</p></div></div><section class="zk-card"><div class="zk-row zk-between"><h2>专业版</h2>${badge('已订阅')}</div><div class="zk-usage"><span>客户档案</span><strong>42 / 1000 位</strong></div><div class="zk-usage"><span>本月语音转写</span><strong>${state.scenario==='quota'?'300':'38'} / 300 分钟</strong></div><div class="zk-usage"><span>本月信息整理</span><strong>124 / 3000 次</strong></div><p class="zk-micro" style="margin-top:10px">用量重置：12 月 1 日 00:00（上海）</p>${goButton('套餐与用量','plans','zk-primary zk-block')}<p class="zk-micro" style="margin-top:10px">历史查看、纠错、手动提醒、导出和删除持续可用。</p></section><button class="zk-list-button" data-go="privacy"><span class="zk-grow">隐私与数据</span><span class="zk-micro">云端转写</span><span class="zk-chevron">›</span></button><button class="zk-list-button" data-go="devices"><span class="zk-grow">账号与登录设备</span><span class="zk-micro">2 台设备</span><span class="zk-chevron">›</span></button><button class="zk-list-button" data-action="toggle-push"><span class="zk-grow">应用提醒</span><span class="zk-micro">${state.push?'已开启':'仅应用内'}</span><span class="zk-chevron">›</span></button><button class="zk-list-button" data-action="restore-purchase"><span class="zk-grow">恢复购买</span><span class="zk-chevron">›</span></button><button class="zk-list-button" data-go="feedback"><span class="zk-grow">帮助与反馈</span><span class="zk-chevron">›</span></button></main>`+nav('me');}
+ function privacy(){return header('隐私与数据')+`<main class="zk-main"><section class="zk-card"><h2>语音处理</h2><div class="zk-usage"><span>转写方式</span><strong>云端服务转写</strong></div><p class="zk-micro" style="margin-top:10px">音频会上传至受控云端进行转写；后续 AI 分析使用经过敏感信息处理的文本。</p><label class="zk-field">录音保留<select id="zk-retention"><option value="delete" ${state.audioRetention==='delete'?'selected':''}>转写后删除录音</option><option value="7days" ${state.audioRetention==='7days'?'selected':''}>保留 7 天</option></select></label><p class="zk-micro" style="margin-top:10px">删除录音不等于从未上传；已保存的文字需单独管理。</p></section><section class="zk-card"><h2>你的资料，你来管理</h2><button class="zk-list-button" data-go="export"><span class="zk-grow">导出客户资料<br><span class="zk-micro">默认不包含完整联系方式和证件</span></span><span class="zk-chevron">›</span></button><button class="zk-list-button" data-go="devices"><span class="zk-grow">管理登录设备</span><span class="zk-chevron">›</span></button><button class="zk-list-button" data-go="delete"><span class="zk-grow zk-danger">删除客户及相关记录</span><span class="zk-chevron">›</span></button></section><div class="zk-note">停止主动联系、停止 AI 分析与删除资料是不同操作，请按需要分别设置。</div>${button('查看数据处理说明','privacy-detail','zk-text-button zk-block')}</main>`;}
+ function contact(){return header('联系偏好',n())+`<main class="zk-main"><p class="zk-muted" style="margin:12px 0;font-size:14px">按照客户表达的意愿安排联系。</p>${[['normal','正常跟进','按已确认的渠道和时间安排'],['pause','暂停联系','暂停主动建议与提醒，档案仍可查看'],['never','不再主动联系','持续停止主动经营，由你明确恢复']].map(([v,t,d])=>`<label class="zk-choice"><input type="radio" name="zk-contact" value="${v}" ${state.contact===v?'checked':''}><span><strong>${t}</strong><br><span class="zk-micro">${d}</span></span></label>`).join('')}<label class="zk-field">记录客户的原话（可选）<textarea id="zk-contact-note" placeholder="例如：近期比较忙，先不要联系我"></textarea></label>${button('保存联系偏好','save-contact','zk-primary zk-block')}<p class="zk-micro" style="margin-top:12px">不会删除历史资料或撤回客户的其他数据处理授权。</p></main>`;}
+ function source(){return header('沟通记录','11 月 13 日 18:20 · 微信后口述')+`<main class="zk-main">${badge('原始依据')}<section class="zk-card"><h2>${n()} · 家庭保障沟通</h2><p class="zk-quote">${esc(state.recordText)}</p><p class="zk-micro" style="margin-top:14px">关联客户：${esc(state.activeId)}<br>录音已按保留策略删除，文字保留。</p></section><div class="zk-note">${state.sourceEdited?'相关建议已标记待更新，旧建议不能再直接采纳。':'如有听写错误或事实变化，可以更正来源。相关建议会同步失效并重新整理。'}</div>${button('更正这条记录','edit-source','zk-primary zk-block')}${goButton('返回客户','customer','zk-secondary zk-block')}</main>`;}
+ function plans(){return header('选择适合你的用法')+`<main class="zk-main"><section class="zk-card"><h2>免费版</h2><p style="margin-top:8px;font-size:14px">100 位客户 · 60 分钟语音 / 月<br>基础记录、手动任务和提醒</p>${badge('基础方案')}</section><section class="zk-card"><div class="zk-row zk-between"><h2>专业版</h2>${badge('当前套餐')}</div><p style="margin-top:12px;font-size:14px;line-height:1.9">1000 位客户<br>300 分钟语音 / 月<br>200 次深度分析 / 月<br>持续经营建议与计划</p><p class="zk-micro" style="margin-top:12px">价格与正式套餐待商业评审。订阅前须展示费用、周期、自动续费及取消方式。</p>${button('查看订阅说明','subscription-info','zk-primary zk-block')}</section><div class="zk-note">降级后保留已有资料；超出额度时限制新增和高级处理，仍可查询、纠错、导出和删除。</div>${button('恢复购买','restore-purchase','zk-secondary zk-block')}</main>`;}
+ function special(){
+  if(state.screen==='task-edit')return taskEdit();if(state.screen==='complete')return complete();if(state.screen==='contact')return contact();if(state.screen==='source')return source();if(state.screen==='plans')return plans();
+  if(state.screen==='inbox')return header('沟通记录')+`<main class="zk-main"><button class="zk-list-button" data-go="confirm"><span class="zk-avatar">待</span><span class="zk-grow">今天的口述记录<br><span class="zk-micro">文字已保存 · 待确认客户</span></span><span>›</span></button><button class="zk-list-button" data-go="source"><span class="zk-avatar">✓</span><span class="zk-grow">11 月 13 日沟通<br><span class="zk-micro">已归档 · ${n()}</span></span><span>›</span></button></main>`;
+  if(state.screen==='draft')return header('本机草稿')+`<main class="zk-main"><div class="zk-note zk-note-warn">${state.scenario==='offline'?'尚未上传到云端。网络恢复后可继续。':'云端转写额度已用完，草稿仍在本机。'}</div><section class="zk-card"><h2>今天 09:41 的记录</h2><p style="margin-top:10px;font-size:14px">00:38 · 待上传</p><p class="zk-micro" style="margin-top:10px">原型仅演示状态；正式 APP 会将草稿加密保存在本机。</p></section>${state.scenario==='offline'?button('模拟网络恢复并继续','retry','zk-primary zk-block'):goButton('查看套餐与额度','me','zk-primary zk-block')}${goButton('返回今天','today','zk-secondary zk-block')}</main>`;
+  if(state.screen==='edit-source'||state.screen==='edit-transcript')return header('更正记录','保存后相关建议会重新整理')+`<main class="zk-main"><label class="zk-field">沟通原文<textarea id="zk-edit-text">${esc(state.recordText)}</textarea></label><p class="zk-micro" style="margin-top:12px">更正内容会保留版本历史。已引用旧内容的建议将标记待更新。</p>${button('保存更正','save-correction','zk-primary zk-block')}</main>`;
+  if(state.screen==='new-customer')return header('新建客户')+`<main class="zk-main"><label class="zk-field">姓名或称呼<input id="zk-new-name" placeholder="例如：陈女士" maxlength="30"></label><label class="zk-field">备注（可选）<textarea placeholder="认识途径、方便联系的时间…" id="zk-new-note"></textarea></label><div class="zk-note">仅记录有适当依据使用的客户信息。首次使用应完成数据处理说明与授权设置。</div>${button('创建客户档案','create-customer','zk-primary zk-block')}</main>`;
+  if(state.screen==='devices')return header('登录设备')+`<main class="zk-main"><section class="zk-card"><h2>当前 iPhone</h2><p class="zk-micro" style="margin-top:8px">本机 · 最近活动：现在</p></section><section class="zk-card"><h2>Android 手机</h2><p class="zk-micro" style="margin-top:8px">最近活动：昨天 20:12</p>${button(state.revoked?'设备已移除':'移除这台设备','revoke-device','zk-text-button',state.revoked?'disabled':'')}</section><div class="zk-note">移除后服务器会拒绝该设备的新请求；离线设备上的本地副本需下次联网才能清理。</div>${button('账号恢复与换号说明','recovery','zk-text-button zk-block')}</main>`;
+  if(state.screen==='export')return header('导出客户资料')+`<main class="zk-main"><section class="zk-card"><h2>选择导出内容</h2><label class="zk-check"><input type="checkbox" checked disabled><span>客户基本资料与沟通记录</span></label><label class="zk-check"><input type="checkbox"><span>包含完整联系方式<br><span class="zk-micro">需要再次验证身份</span></span></label><p class="zk-micro" style="margin-top:12px">证件信息默认排除。生成后提供有时效的下载入口。</p></section>${button('验证身份并申请导出','request-export','zk-primary zk-block')}<p class="zk-micro" style="margin-top:12px">演示不会生成文件或读取实际资料。</p></main>`;
+  if(state.screen==='delete')return header('删除客户资料')+`<main class="zk-main">${state.deleted?'<div class="zk-note">删除请求已提交（演示）。档案立即停止访问，清理进度可继续查看。</div><section class="zk-card"><h2>正在清理相关资料</h2><p class="zk-micro" style="margin-top:10px">进行中：记录、摘要、向量和建议<br>不提供恢复或撤销入口</p></section>':`<section class="zk-card"><h2 class="zk-danger">删除 ${n()} 及其资料</h2><p style="font-size:14px;margin-top:12px">包括客户档案、归属明确的沟通记录、衍生摘要、检索索引和相关建议；涉及多位客户的记录需先核实归属。</p><p class="zk-micro" style="margin-top:12px">目标：立即停止访问，在线副本 72 小时内清理；备份按最长 30 天生命周期过期，恢复时继续执行删除。具体承诺需随上线存储策略核定。</p></section><label class="zk-check"><input type="checkbox" id="zk-delete-check" ${state.deleteConfirmed?'checked':''}><span>我已了解删除范围，提交后无法撤销。</span></label>${button('确认提交删除（演示）','submit-delete','zk-danger-button zk-block',state.deleteConfirmed?'':'disabled')}`}<p class="zk-micro" style="margin-top:16px">仅演示流程，不执行真实删除。</p></main>`;
+  if(state.screen==='feedback')return header('帮助与反馈')+`<main class="zk-main"><label class="zk-field">反馈内容<textarea id="zk-feedback" placeholder="哪里不准确，或哪里不方便？"></textarea></label><label class="zk-check"><input type="checkbox"><span>附上当前建议编号<br><span class="zk-micro">不默认附上客户原文和联系方式</span></span></label>${button('保存反馈（演示）','submit-feedback','zk-primary zk-block')}</main>`;
+  return today();
+ }
+ const views={today,record,confirm,customers,customer,insight,tasks,assistant,me,privacy};
+ function render(){const html=views[state.screen]?views[state.screen]():special();app.innerHTML=(state.note?`<div class="zk-notice" role="status">${esc(state.note)}</div>`:'')+html;root.querySelector('.zk-phone').classList.toggle('zk-large',design.largeText);picker.value=screens[state.screen]?state.screen:'customer';scenarioPicker.value=state.scenario;}
+ root.addEventListener('click',e=>{
+  const target=e.target.closest('button');if(!target)return;
+  if(target.dataset.go){navigate(target.dataset.go);return;}
+  if(target.dataset.customer){const p=people.find(p=>p.id===target.dataset.customer);state.activeName=p.name;state.activeId=p.id;navigate('customer');return;}
+  if(target.dataset.filter){state.filter=target.dataset.filter;render();return;}
+  if(target.dataset.taskFilter){state.taskFilter=target.dataset.taskFilter;render();return;}
+  const action=target.dataset.action;if(!action)return;state.note='';
+  switch(action){
+   case 'back':state.screen=state.history.pop()||'today';break;
+   case 'record':state.paused=false;navigate('record');return;
+   case 'pause':state.paused=!state.paused;break;
+   case 'text-mode':state.textMode=true;break;
+   case 'finish-record':{const field=root.querySelector('#zk-record-text');if(field){if(!field.value.trim()){notify('请先填写沟通内容。');break;}state.recordText=field.value.trim();}navigate(['offline','quota'].includes(state.scenario)?'draft':'confirm');return;}
+   case 'permission-help':notify('请在手机系统设置 → 保知伴 AI → 麦克风中开启权限。');break;
+   case 'retry':state.scenario='normal';navigate('confirm');return;
+   case 'archive':if(!state.chosen)break;state.archived=true;state.activeId=state.chosen==='new'?'CX-0043':state.chosen==='another'?'CX-0039':'CX-0042';state.activeName='陈敏';navigate('customer');notify(`已归档记录，${state.facts.size} 项事实已确认；其余仍待确认。`);break;
+   case 'source':case 'latest-source':navigate('source');return;
+   case 'edit-source':navigate('edit-source');return;
+   case 'edit-transcript':navigate('edit-transcript');return;
+   case 'save-correction':{const field=root.querySelector('#zk-edit-text');if(!field.value.trim()){notify('记录内容不能为空。');break;}state.recordText=field.value.trim();state.sourceEdited=true;navigate('customer');notify('记录已更正，相关建议已标记待更新。');break;}
+   case 'regenerate':notify('演示：已提交重新分析。原建议继续标记待更新，收到新结果后才可采纳。');break;
+   case 'save-task':{if(state.contact!=='normal'){notify('客户已限制主动联系，请先核对联系偏好。');break;}const title=root.querySelector('#zk-task-title').value.trim(),date=root.querySelector('#zk-task-date').value,time=root.querySelector('#zk-task-time').value;if(!title||!date||!time){notify('请填写跟进事项、日期和时间。');break;}state.taskTitle=title;state.taskDate=date;state.taskTime=time;state.channel=root.querySelector('#zk-task-channel').value;state.taskAdded=true;state.taskDone=false;state.taskFilter='all';navigate('tasks');notify('跟进已创建，未向客户发送消息。');break;}
+   case 'complete':state.completingZhou=false;state.outcome='';navigate('complete');return;
+   case 'complete-zhou':state.completingZhou=true;state.outcome='';navigate('complete');return;
+   case 'save-outcome':if(state.outcome){if(state.completingZhou){state.zhouDone=true;state.zhouOutcome=state.outcome;}else{state.taskDone=true;state.taskOutcome=state.outcome;}state.taskFilter='all';navigate('tasks');notify('本次联系结果已保存。');}break;
+   case 'postpone':{const date=new Date(state.taskDate+'T12:00:00Z');date.setUTCDate(date.getUTCDate()+1);state.taskDate=date.toISOString().slice(0,10);state.taskPostponed=true;notify('已延期一天，并更新提醒。');break;}
+   case 'postpone-zhou':state.zhouPostponed=true;state.taskFilter='future';notify('周先生的跟进已延期至明天 16:00。');break;
+   case 'save-contact':{const c=root.querySelector('input[name="zk-contact"]:checked');state.contact=c?.value||'normal';navigate('customer');notify(state.contact==='normal'?'联系偏好已保存。':'主动经营建议和提醒已停止。');break;}
+   case 'ask':{const q=root.querySelector('#zk-question').value.trim();if(!q){notify('先输入你想核实的问题。');break;}state.question=q;state.answered=true;break;}
+   case 'create-customer':{const name=root.querySelector('#zk-new-name').value.trim();if(!name){notify('请填写姓名或称呼。');break;}state.activeName=name;state.activeId='CX-0043';navigate('customer');notify('新档案已创建，详细情况仍待补充。');break;}
+   case 'feedback':navigate('feedback');return;
+   case 'submit-feedback':if(!root.querySelector('#zk-feedback').value.trim()){notify('请填写反馈内容。');break;}navigate('insight');notify('反馈已在演示中记录，未发送至外部服务。');break;
+   case 'toggle-push':state.push=!state.push;notify(state.push?'演示：提醒已开启。':'演示：系统通知关闭，应用内提醒继续保留。');break;
+   case 'restore-purchase':notify('演示：暂未发现可恢复订阅。正式 APP 将通过原购买渠道校验。');break;
+   case 'subscription-info':notify('此原型不提供购买；正式订阅页需要明确价格、周期、自动续费和取消方式。');break;
+   case 'request-export':notify('演示：下一步为身份验证，验证成功后才会创建导出任务。');break;
+   case 'revoke-device':state.revoked=true;notify('演示：已撤销 Android 设备会话，离线副本待下次联网清理。');target.disabled=true;break;
+   case 'recovery':notify('换号或账号恢复须核验已有设备与身份，不能仅凭新手机号验证码接管原账号。');break;
+   case 'submit-delete':if(state.deleteConfirmed){state.deleted=true;notify('演示删除请求已提交。');}break;
+   case 'privacy-detail':notify('原始音频用于受控转写；进入语言模型前处理敏感标识。保留、导出与删除按分别确认的策略执行。');break;
+  }
+  render();persist();
+ });
+ root.addEventListener('change',e=>{
+  const t=e.target;
+  if(t===picker){state.history=[];state.screen=t.value;state.note='';render();persist();return;}
+  if(t===scenarioPicker){state.scenario=t.value;state.screen=t.value==='partial'?'confirm':t.value==='normal'?'today':'record';state.note='';render();return;}
+  if(t.name==='zk-person'){state.chosen=t.value;const save=root.querySelector('[data-action="archive"]');save.disabled=false;}
+  if(t.dataset.fact){t.checked?state.facts.add(t.dataset.fact):state.facts.delete(t.dataset.fact);const save=root.querySelector('[data-action="archive"]');save.textContent=state.facts.size?`归档并确认 ${state.facts.size} 项`:'仅归档到所选客户';}
+  if(t.name==='zk-outcome'){state.outcome=t.value;root.querySelector('[data-action="save-outcome"]').disabled=false;}
+  if(t.id==='zk-retention'){state.audioRetention=t.value;root.querySelector('#zk-announcement').textContent='录音保留偏好已更新（演示）';}
+  if(t.id==='zk-delete-check'){state.deleteConfirmed=t.checked;root.querySelector('[data-action="submit-delete"]').disabled=!t.checked;}
+ });
+ root.addEventListener('input',e=>{if(e.target.id==='zk-search'){state.search=e.target.value.trim();root.querySelector('#zk-customer-list').innerHTML=listItems();}});
+ window.addEventListener('openai:set_globals',event=>{if(event.detail?.globals?.widgetState){restore(event.detail.globals.widgetState);render();}});
+ render();
+ if(globalThis.Tweak){const tweak=new Tweak({container:root.querySelector('.zk-phone'),onChange:()=>{render();persist();}});tweak.addToggle(design,'largeText',{label:'增大正文字号'});tweak.addToggle(design,'recordFirst',{label:'首页优先展示录音入口'});}
+})();
+</script>

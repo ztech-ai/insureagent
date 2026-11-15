@@ -1,0 +1,33 @@
+{
+  "source": "docs/architecture/11_产品开发计划.md",
+  "checks": {
+    "workpackages": 12,
+    "functional_requirements": 20,
+    "review_findings": 18,
+    "sprints": 10,
+    "gates": 6,
+    "quality_targets": 12,
+    "sprint1_tasks": 10,
+    "role_capacity_no_overrun": true,
+    "requirement_mapping_ids_valid": true,
+    "estimate_sum_valid": true,
+    "csv_column_counts_valid": true,
+    "prd_schedule_reconciled": true,
+    "overview_index_updated": true
+  },
+  "planned_effective_days": 513,
+  "capacity_effective_days": 637.5,
+  "reserve_effective_days": 124.5,
+  "reserve_percent_capacity": 19.53,
+  "scope_note": "仅验证计划内部一致性，不代表软件实现、质量验证或项目批准。",
+  "files": [
+    "Sprint1启动任务.csv",
+    "WBS工作包与工时.csv",
+    "角色产能.csv",
+    "质量验收指标.csv",
+    "迭代与里程碑.csv",
+    "阶段放行清单.csv",
+    "需求与验收追踪.csv"
+  ],
+  "online_plan_url": "https://chatgpt.com/space/page_0618a023e1b48191b85afd1aded45ae3"
+}

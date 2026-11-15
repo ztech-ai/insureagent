@@ -1,0 +1,14 @@
+FROM python:3.12-slim
+WORKDIR /app
+COPY pyproject.toml uv.lock ./
+COPY services ./services
+COPY packages ./packages
+RUN --mount=type=secret,id=ca_bundle,target=/tmp/ca-bundle.pem \
+    if [ -f /tmp/ca-bundle.pem ]; then \
+      export SSL_CERT_FILE=/tmp/ca-bundle.pem PIP_CERT=/tmp/ca-bundle.pem; \
+    fi; \
+    pip install --no-cache-dir uv==0.13.6 && uv --system-certs sync --frozen --no-dev --no-editable
+RUN chmod -R a+rX /app && useradd --uid 10001 --create-home appuser
+USER appuser
+EXPOSE 8000
+CMD ["/app/.venv/bin/uvicorn", "insureagent_api.main:app", "--host", "0.0.0.0", "--port", "8000"]
