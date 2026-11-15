@@ -24,7 +24,12 @@ class _RecordDetailState extends State<RecordDetail> {
     super.initState();
     load();
     poll = Timer.periodic(const Duration(seconds: 3), (t) {
-      if (++polls > 40 || row?['data']['processing'] == 'succeeded') {
+      if (++polls > 40 ||
+          [
+            'succeeded',
+            'failed',
+            'partial_success',
+          ].contains(row?['data']['processing'])) {
         t.cancel();
         return;
       }
@@ -158,7 +163,7 @@ class _RecordDetailState extends State<RecordDetail> {
             padding: const EdgeInsets.all(16),
             children: [
               section(
-                '已保存 · ${processingLabel(row!['data']['processing'])}',
+                '已保存 · ${processingLabel(row!['job']?['state'] == 'running' ? 'running' : row!['data']['processing'])}',
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -167,6 +172,11 @@ class _RecordDetailState extends State<RecordDetail> {
                           ? '语音已保存，等待转写。'
                           : row!['data']['text'],
                     ),
+                    Text(
+                      '归属：${row!['data']['identity']} · 已确认 ${row!['confirmation']?['confirmed'] ?? 0}/${row!['confirmation']?['total'] ?? 0} 项',
+                    ),
+                    if (row!['data']['error_code'] != null)
+                      Text('处理错误：${row!['data']['error_code']}'),
                     TextButton(
                       onPressed: busy ? null : edit,
                       child: const Text('更正或补充转写'),

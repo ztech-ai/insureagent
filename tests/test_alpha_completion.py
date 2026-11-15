@@ -163,3 +163,29 @@ def test_worker_rejects_ungrounded_evidence(alpha):
     result = client.get("/v1/records/" + row["id"], headers=alice).json()
     assert result["data"]["processing"] == "failed"
     assert result["facts"] == []
+
+
+def test_concurrent_replay_and_claim_are_single_delivery(alpha):
+    from concurrent.futures import ThreadPoolExecutor
+    from uuid import uuid4
+
+    from insureagent_persistence.store import jobs, stage_usage
+    from sqlalchemy import select
+
+    client, store, alice, _, _ = alpha
+    ident = str(uuid4())
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        records = list(pool.map(lambda _: add_record(client, alice, client_id=ident), range(8)))
+    assert len({r["id"] for r in records}) == 1
+    workers = [Processor(store), Processor(store)]
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        claims = list(pool.map(lambda worker: worker.claim(), workers))
+    assert sum(c is not None for c in claims) == 1
+    from insureagent_ai.extraction.local import extract
+
+    job = next(c for c in claims if c is not None)
+    assert workers[0].deliver(job, output=extract(job["text"]))
+    assert not workers[0].deliver(job, output=extract(job["text"]))
+    with store.transaction() as conn:
+        assert len(conn.execute(select(jobs)).all()) == 1
+        assert len(conn.execute(select(stage_usage)).all()) == 1

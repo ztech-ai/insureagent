@@ -54,6 +54,7 @@ uv run ruff check .
 uv run ruff format --check .
 uv run pytest -q
 uv run python scripts/alpha_smoke.py
+uv run python scripts/evaluate_alpha.py
 uv run python scripts/export_contracts.py
 git diff --exit-code -- contracts
 cd apps/mobile

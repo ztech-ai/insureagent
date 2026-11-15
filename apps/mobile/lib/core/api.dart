@@ -59,14 +59,24 @@ class AlphaApi {
     } catch (_) {
       throw ApiFailure(0, 'network_unavailable');
     }
-    final dynamic decoded = response.body.isEmpty
-        ? null
-        : jsonDecode(utf8.decode(response.bodyBytes));
+    dynamic decoded;
+    try {
+      decoded = response.bodyBytes.isEmpty
+          ? null
+          : jsonDecode(utf8.decode(response.bodyBytes));
+    } catch (_) {
+      throw ApiFailure(
+        response.statusCode >= 400 ? response.statusCode : 0,
+        'invalid_server_response',
+      );
+    }
     if (response.statusCode >= 400) {
       throw ApiFailure(
         response.statusCode,
-        decoded is Map
-            ? '${decoded['detail'] ?? 'request_failed'}'
+        decoded is Map &&
+                decoded['detail'] is String &&
+                RegExp(r'^[a-z0-9_]{1,80}$').hasMatch(decoded['detail'])
+            ? decoded['detail']
             : 'request_failed',
       );
     }

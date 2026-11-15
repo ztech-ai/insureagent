@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
-from insureagent_persistence.store import Conflict, accounts, audio_blobs, entities
+from insureagent_persistence.store import Conflict, accounts, audio_blobs, entities, jobs
 from sqlalchemy import delete as sql_delete
 from sqlalchemy import select
 
@@ -27,6 +27,26 @@ def record_detail(store, conn, row):
         for f in store.list(conn, row["tenant_id"], "fact", source_id=row["id"])
         if f["data"]["state"] != "retracted"
     ]
+    job = (
+        conn.execute(
+            select(jobs).where(
+                jobs.c.tenant_id == row["tenant_id"],
+                jobs.c.record_id == row["id"],
+                jobs.c.revision == row["revision"],
+            )
+        )
+        .mappings()
+        .first()
+    )
+    row["job"] = (
+        {"state": job["state"], "attempts": job["attempts"], "error_code": job["error_code"]}
+        if job
+        else None
+    )
+    row["confirmation"] = {
+        "total": len(row["facts"]),
+        "confirmed": sum(f["data"]["state"] == "confirmed" for f in row["facts"]),
+    }
     names = row["data"].get("person_names", [])
     row["customer_candidates"] = [
         c for c in store.list(conn, row["tenant_id"], "customer") if c["data"]["name"] in names

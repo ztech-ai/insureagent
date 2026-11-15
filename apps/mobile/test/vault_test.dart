@@ -69,4 +69,11 @@ void main() {
     final vault = await testVault(root, 'alice');
     await expectLater(vault.remove('../outside'), throwsArgumentError);
   });
+  test('missing audio fragment cannot be silently joined', () async {
+    final vault = await testVault(root, 'alice');
+    final id = await vault.create(type: 'audio');
+    await vault.appendAudio(id, 0, Uint8List(3200));
+    await vault.appendAudio(id, 2, Uint8List(3200));
+    await expectLater(vault.audio(id), throwsStateError);
+  });
 }

@@ -17,12 +17,14 @@
 
 ## 当前自动化结果
 
-- Python：26 个用例在 SQLite 和 PostgreSQL 17 通过；包括音频失败及重试、多人归属、幂等、隔离和证据校验。
-- Flutter：6 个测试通过，静态分析无问题。测试使用模拟 HTTP 和设备密钥存储替身，不代表麦克风或 Keychain 真机验证。
+- Python：27 个用例在 SQLite 和 PostgreSQL 17 通过；包括音频失败及重试、多人归属、幂等、隔离和证据校验。
+- Flutter：9 个测试通过，静态分析无问题。测试使用模拟 HTTP 和设备密钥存储替身，不代表麦克风或 Keychain 真机验证。
 - `scripts/alpha_smoke.py`：临时账户与临时数据库，真实 HTTP 服务和独立 Worker，验证完整文字链路及 API 重启后持久化。
 - CI 扩展为 Python、PostgreSQL、Flutter、Android debug APK、iOS simulator build；最终结果以当前提交的 Actions 为准。
 - 本地 Vosk 中文模型已加载并完成合成语音推理；espeak 合成语音识别明显失真，**未通过 ASR 准确率验收**。API 测试中的确定性转写替身仅验证流程。
 - Ollama 适配器通过契约、越界证据和脱敏测试；当前环境未安装并运行实际 LLM，不能宣称已完成模型质量评测。
+
+- 合成契约回归：10 个固定场景，检查来源、姓名、否定句保留、常见标识符脱敏及注入文本无工具副作用。结果见 `evals/reports/alpha-rules-contract.json`；样本不足以代表实际准确率。
 
 ## 设计取舍和适用边界
 
